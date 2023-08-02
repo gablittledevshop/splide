@@ -6,7 +6,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
  * Splide.js
  * Version  : 4.1.4
  * License  : MIT
- * Copyright: 2022 Naotoshi Fujita
+ * Copyright: 2023 Naotoshi Fujita
  */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() : typeof define === 'function' && define.amd ? define(factory) : (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Splide = factory());
@@ -741,7 +741,6 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     return elm;
   }
 
-  var FRICTION = 5;
   var LOG_INTERVAL = 200;
   var POINTER_DOWN_EVENTS = "touchstart mousedown";
   var POINTER_MOVE_EVENTS = "touchmove mousemove";
@@ -2308,7 +2307,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     }
 
     function constrain(diff) {
-      return diff / (exceeded && Splide2.is(SLIDE) ? FRICTION : 1);
+      return diff / options.friction;
     }
 
     function isDraggable(target2) {

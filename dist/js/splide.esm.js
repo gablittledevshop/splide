@@ -6,7 +6,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
  * Splide.js
  * Version  : 4.1.4
  * License  : MIT
- * Copyright: 2022 Naotoshi Fujita
+ * Copyright: 2023 Naotoshi Fujita
  */
 var MEDIA_PREFERS_REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
 var CREATED = 1;
@@ -743,7 +743,6 @@ function closest(from, selector) {
   return elm;
 }
 
-var FRICTION = 5;
 var LOG_INTERVAL = 200;
 var POINTER_DOWN_EVENTS = "touchstart mousedown";
 var POINTER_MOVE_EVENTS = "touchmove mousemove";
@@ -2310,7 +2309,7 @@ function Drag(Splide2, Components2, options) {
   }
 
   function constrain(diff) {
-    return diff / (exceeded && Splide2.is(SLIDE) ? FRICTION : 1);
+    return diff / options.friction;
   }
 
   function isDraggable(target2) {

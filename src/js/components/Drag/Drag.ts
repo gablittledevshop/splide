@@ -359,7 +359,9 @@ export function Drag( Splide: Splide, Components: Components, options: Options )
    * @return The constrained diff.
    */
   function constrain( diff: number ): number {
-    return diff / ( exceeded && Splide.is( SLIDE ) ? FRICTION : 1 );
+    return diff / options.friction;
+
+    // return diff / ( exceeded && Splide.is( SLIDE ) ? FRICTION : 1 );
   }
 
   /**
