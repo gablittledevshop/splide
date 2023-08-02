@@ -2307,7 +2307,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     }
 
     function constrain(diff) {
-      return diff / options.friction;
+      return diff / options.dragFriction;
     }
 
     function isDraggable(target2) {

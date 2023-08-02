@@ -2309,7 +2309,7 @@ function Drag(Splide2, Components2, options) {
   }
 
   function constrain(diff) {
-    return diff / options.friction;
+    return diff / options.dragFriction;
   }
 
   function isDraggable(target2) {

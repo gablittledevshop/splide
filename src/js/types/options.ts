@@ -311,7 +311,7 @@ export interface ResponsiveOptions {
    * perPage since perPage doesn't really work if you drag
    * too far or too fast currently
    */
-  friction?: number;
+  dragFriction?: number;
 
   /**
    * Determines the number of slides to move at once.
