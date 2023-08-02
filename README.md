@@ -112,3 +112,37 @@ The Splide slider does not degrade Accessibility, Best Practices and SEO 🎉
 ## License
 
 Splide is released under MIT license. © 2022 Naotoshi Fujita
+
+## Forked Changes
+The purpose of this fork is enforce the `flickMaxPages: 1` rule. Currently `flickMaxPages: 1` doesn't behave as you'd expect, although it's by design from the maintainer.
+
+Sources:
+- https://github.com/Splidejs/splide/discussions/528
+- https://github.com/Splidejs/splide/issues/1002
+
+By adjusting the friction, I can enforce `flickMaxPages: 1` but note that you also need to set `flickPower: 1`. To adjust the friction, add `dragFriction` to your options with a numerical value. For example, 
+```
+{
+  arrows: false,
+  pagination: false,
+  perPage: 1,
+  focus: 'center',
+  padding: '27.9%',
+  mediaQuery: 'min',
+  start: 5,
+  type: 'loop',
+  flickMaxPages: 1,
+  flickPower: 1,
+  dragFriction: 2,
+  breakpoints: {
+    1024: {
+      padding: '40.2%',
+      dragFriction: 5
+    },
+  }
+}
+```
+
+**IMPORTANT!**
+I made this for my use case only (i.e. enforcing that I only want to drag/swipe one slide at a time), so it hasn't been tested for multiple slides per drag/swipe.
+
