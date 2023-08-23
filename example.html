@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+    
+    <link rel="stylesheet" href="./dist/css/splide.min.css">
+
+    <style>
+      img {
+        width: 100%;
+      }
+
+      .img-container {
+        padding: 0 20px;
+      }
+    </style>
+	</head>
+	<body>
+		<main>
+      <section class="splide" aria-label="Splide Basic HTML Example">
+        <div class="splide__track">
+          <ul class="splide__list">
+            <li class="splide__slide">
+              <div class="img-container">
+                <img src="https://placehold.co/300x300/orange/white"/>
+              </div>
+            </li>
+            <li class="splide__slide">
+              <div class="img-container">
+                <img src="https://placehold.co/300x300/red/white"/>
+              </div>
+            </li>
+            <li class="splide__slide">
+              <div class="img-container">
+                <img src="https://placehold.co/300x300/blue/white"/>
+              </div>
+            </li>
+            <li class="splide__slide">
+              <div class="img-container">
+                <img src="https://placehold.co/300x300/green/white"/>
+              </div>
+            </li>
+            <li class="splide__slide">
+              <div class="img-container">
+                <img src="https://placehold.co/300x300/black/white"/>
+              </div>
+            </li>
+            <li class="splide__slide">
+              <div class="img-container">
+                <img src="https://placehold.co/300x300/purple/white"/>
+              </div>
+            </li>
+            <li class="splide__slide">
+              <div class="img-container">
+                <img src="https://placehold.co/300x300/teal/white"/>
+              </div>
+            </li>
+            <li class="splide__slide">
+              <div class="img-container">
+                <img src="https://placehold.co/300x300/grey/white"/>
+              </div>
+            </li>
+            <li class="splide__slide">
+              <div class="img-container">
+                <img src="https://placehold.co/300x300/magenta/white"/>
+              </div>
+            </li>
+            <li class="splide__slide">
+              <div class="img-container">
+                <img src="https://placehold.co/300x300/olive/white"/>
+              </div>
+            </li>
+            <li class="splide__slide">
+              <div class="img-container">
+                <img src="https://placehold.co/300x300/salmon/white"/>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </main>
+	</body>
+
+  <script src="./dist/js/splide.min.js"></script>
+  <script>
+    const splideOptions = {
+      perPage: 1,
+      focus: 'center',
+      padding: '27.9%',
+      mediaQuery: 'min',
+      start: 5,
+      type: 'loop',
+      // flickMaxPages: 1,
+      // flickPower: 1,
+      // dragFriction: 1,
+      breakpoints: {
+        1024: {
+          padding: '40.2%',
+          // dragFriction: 3
+        },
+      }
+    };
+
+    document.addEventListener( 'DOMContentLoaded', function() {
+      const splide = new Splide( '.splide', splideOptions).mount();
+    } );
+  </script>
+</html>
