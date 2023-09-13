@@ -82,7 +82,8 @@
     </main>
 	</body>
 
-  <script src="./dist/js/splide.min.js"></script>
+  <!-- <script src="./dist/js/splide.min.js"></script> -->
+  <script src="./dist/js/splide.js"></script>
   <script>
     const splideOptions = {
       perPage: 1,
@@ -91,12 +92,12 @@
       mediaQuery: 'min',
       start: 5,
       type: 'loop',
-      // flickMaxPages: 1,
+      flickMaxPages: 0.03,
       // flickPower: 1,
       // dragFriction: 1,
       breakpoints: {
         1024: {
-          padding: '40.2%',
+          //padding: '40.2%',
           // dragFriction: 3
         },
       }

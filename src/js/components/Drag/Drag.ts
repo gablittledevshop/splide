@@ -102,7 +102,7 @@ export function Drag( Splide: Splide, Components: Components, options: Options )
   function init(): void {
     const { drag } = options;
     disable( ! drag );
-    isFree = drag === 'free';
+    isFree = drag === 'free'; 
   }
 
   /**
@@ -124,6 +124,7 @@ export function Drag( Splide: Splide, Components: Components, options: Options )
           target        = isTouch ? track : window;
           dragging      = state.is( [ MOVING, SCROLLING ] );
           prevBaseEvent = null;
+          console.log('on pointer down');
 
           bind( target, POINTER_MOVE_EVENTS, onPointerMove, SCROLL_LISTENER_OPTIONS );
           bind( target, POINTER_UP_EVENTS, onPointerUp, SCROLL_LISTENER_OPTIONS );
@@ -146,18 +147,31 @@ export function Drag( Splide: Splide, Components: Components, options: Options )
     if ( ! state.is( DRAGGING ) ) {
       state.set( DRAGGING );
       emit( EVENT_DRAG );
+      console.log('drag start');
     }
 
     if ( e.cancelable ) {
       if ( dragging ) {
-        Move.translate( basePosition + constrain( diffCoord( e ) ) );
+        const diff = constrain( diffCoord( e ) );
+        const CONSTRAINT = 1170;
+        console.log(basePosition);
+        console.log(`diff: ${diff}`); 
+        console.log(Math.abs(diff) - Math.abs(CONSTRAINT));
 
+        // if (diff > CONSTRAINT) {
+        if (Math.abs(CONSTRAINT) - Math.abs(diff) > 0) {
+          // console.log('ok')
+          Move.translate( basePosition + constrain( diffCoord( e ) ) );
+        }
         const expired     = diffTime( e ) > LOG_INTERVAL;
         const hasExceeded = exceeded !== ( exceeded = exceededLimit() );
 
-        if ( expired || hasExceeded ) {
-          save( e );
-        }
+        // if ( expired || hasExceeded ) {
+        //   console.log('expired')
+        //   save( e );
+        // }
+
+        console.log('is dragging');
 
         clickPrevented = true;
         emit( EVENT_DRAGGING );
@@ -213,7 +227,8 @@ export function Drag( Splide: Splide, Components: Components, options: Options )
   function save( e: TouchEvent | MouseEvent ): void {
     prevBaseEvent = baseEvent;
     baseEvent     = e;
-    basePosition  = getPosition();
+    basePosition  = getPosition(); // Current translate X value of splide__list
+    console.log('save');
   }
 
   /**
@@ -225,8 +240,12 @@ export function Drag( Splide: Splide, Components: Components, options: Options )
    */
   function move( e: TouchEvent | MouseEvent ): void {
     const velocity    = computeVelocity( e );
+    // const velocity = 1;
     const destination = computeDestination( velocity );
     const rewind      = options.rewind && options.rewindByDrag;
+    console.log('move');
+    console.log(destination);
+    // console.log(velocity);
 
     reduce( false );
 
@@ -237,6 +256,7 @@ export function Drag( Splide: Splide, Components: Components, options: Options )
     } else if ( Splide.is( SLIDE ) && exceeded && rewind ) {
       Controller.go( exceededLimit( true ) ? '>' : '<' );
     } else {
+      console.log('here');
       Controller.go( Controller.toDest( destination ), true );
     }
 
@@ -359,9 +379,9 @@ export function Drag( Splide: Splide, Components: Components, options: Options )
    * @return The constrained diff.
    */
   function constrain( diff: number ): number {
-    return diff / options.dragFriction;
+    // return diff / options.dragFriction;    // New
 
-    // return diff / ( exceeded && Splide.is( SLIDE ) ? FRICTION : 1 );
+    return diff / ( exceeded && Splide.is( SLIDE ) ? FRICTION : 1 );  // Orig
   }
 
   /**

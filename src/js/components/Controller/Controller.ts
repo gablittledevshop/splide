@@ -342,6 +342,7 @@ export function Controller( Splide: Splide, Components: Components, options: Opt
    */
   function toDest( destination: number ): number {
     const closest = Move.toIndex( destination );
+    console.log(closest);
     return isSlide ? clamp( closest, 0, endIndex ) : closest;
   }
 
