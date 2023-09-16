@@ -89,11 +89,12 @@ export function Move( Splide: Splide, Components: Components, options: Options )
    * @param callback - Optional. A callback function invoked after transition ends.
    */
   function move( dest: number, index: number, prev: number, callback?: AnyFunction ): void {
+    console.log(`canShift: ${canShift( dest > prev )}`)
     if ( dest !== index && canShift( dest > prev ) ) {
       cancel();
       translate( shift( getPosition(), dest > prev ), true );
     }
-
+    
     set( MOVING );
     emit( EVENT_MOVE, index, prev, dest );
 
@@ -265,9 +266,18 @@ export function Move( Splide: Splide, Components: Components, options: Options )
    */
   function canShift( backwards: boolean ): boolean {
     const shifted = orient( shift( getPosition(), backwards ) );
+    
+    // console.log(shifted)
+    // console.log(limit);
+    // console.log(shifted <= limit);
+    // if (!backwards && shifted > limit) {
+    //   shifted = limit - 10;
+    // }
+    
     return backwards
       ? shifted >= 0
-      : shifted <= list[ resolve( 'scrollWidth' ) ] - rect( track )[ resolve( 'width' ) ];
+      : true;   // force shifting
+      // : shifted <= list[ resolve( 'scrollWidth' ) ] - rect( track )[ resolve( 'width' ) ];
   }
 
   /**
