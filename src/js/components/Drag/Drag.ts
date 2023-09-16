@@ -153,25 +153,25 @@ export function Drag( Splide: Splide, Components: Components, options: Options )
     if ( e.cancelable ) {
       if ( dragging ) {
         const diff = constrain( diffCoord( e ) );
-        const CONSTRAINT = 1170;
-        console.log(basePosition);
-        console.log(`diff: ${diff}`); 
-        console.log(Math.abs(diff) - Math.abs(CONSTRAINT));
+        // const CONSTRAINT = 1170;
+        // console.log(basePosition);
+        // console.log(`diff: ${diff}`); 
+        // console.log(Math.abs(diff) - Math.abs(CONSTRAINT));
 
         // if (diff > CONSTRAINT) {
-        if (Math.abs(CONSTRAINT) - Math.abs(diff) > 0) {
+        if (Math.abs(options.constraint) - Math.abs(diff) > 0) {
           // console.log('ok')
           Move.translate( basePosition + constrain( diffCoord( e ) ) );
         }
-        const expired     = diffTime( e ) > LOG_INTERVAL;
-        const hasExceeded = exceeded !== ( exceeded = exceededLimit() );
+        // const expired     = diffTime( e ) > LOG_INTERVAL;
+        // const hasExceeded = exceeded !== ( exceeded = exceededLimit() );
 
         // if ( expired || hasExceeded ) {
         //   console.log('expired')
         //   save( e );
         // }
 
-        console.log('is dragging');
+        // console.log('is dragging');
 
         clickPrevented = true;
         emit( EVENT_DRAGGING );
@@ -240,12 +240,36 @@ export function Drag( Splide: Splide, Components: Components, options: Options )
    */
   function move( e: TouchEvent | MouseEvent ): void {
     const velocity    = computeVelocity( e );
-    // const velocity = 1;
-    const destination = computeDestination( velocity );
+    let destination = computeDestination( velocity );
+    // const CONSTRAINT = 1170;
     const rewind      = options.rewind && options.rewindByDrag;
     console.log('move');
-    console.log(destination);
-    // console.log(velocity);
+    console.log(Math.abs(basePosition - destination));
+
+
+    // If the diff is larger than the constraint,
+    // then just add the constraint to the basePosition to avoid
+    // overshooting
+    if (Math.abs(basePosition - destination) > options.constraint) {
+      // Swiping left
+      if (destination < basePosition) {
+        // This gets triggered when we're at the first slide and swiping right
+        destination = basePosition - options.constraint;
+
+        // So we add a special case here
+        if (Controller.getIndex() === 0) {
+          destination = basePosition + options.constraint;  
+        }
+      } else {
+        // This gets triggered when we're at the last slide and swiping left
+        destination = basePosition + options.constraint;
+
+        // So we add a special case here
+        if (Controller.getIndex() === Controller.getEnd()) {
+          destination = basePosition - options.constraint;
+        } 
+      }
+    } 
 
     reduce( false );
 
@@ -256,7 +280,6 @@ export function Drag( Splide: Splide, Components: Components, options: Options )
     } else if ( Splide.is( SLIDE ) && exceeded && rewind ) {
       Controller.go( exceededLimit( true ) ? '>' : '<' );
     } else {
-      console.log('here');
       Controller.go( Controller.toDest( destination ), true );
     }
 
@@ -320,6 +343,9 @@ export function Drag( Splide: Splide, Components: Components, options: Options )
       abs( velocity ) * ( options.flickPower || 600 ),
       isFree ? Infinity : Components.Layout.listSize() * ( options.flickMaxPages || 1 )
     );
+
+    // If velocity is always 0
+    // return getPosition() * Components.Layout.listSize() * ( options.flickMaxPages || 1 );
   }
 
   /**
@@ -379,9 +405,7 @@ export function Drag( Splide: Splide, Components: Components, options: Options )
    * @return The constrained diff.
    */
   function constrain( diff: number ): number {
-    // return diff / options.dragFriction;    // New
-
-    return diff / ( exceeded && Splide.is( SLIDE ) ? FRICTION : 1 );  // Orig
+    return diff / ( exceeded && Splide.is( SLIDE ) ? FRICTION : 1 );  
   }
 
   /**

@@ -133,11 +133,10 @@ By adjusting the friction, I can enforce `flickMaxPages: 1` but note that you al
   type: 'loop',
   flickMaxPages: 1,
   flickPower: 1,
-  dragFriction: 2,
+  constraint: 1170,
   breakpoints: {
     1024: {
       padding: '40.2%',
-      dragFriction: 5
     },
   }
 }
