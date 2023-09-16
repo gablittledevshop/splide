@@ -538,6 +538,10 @@ interface ResponsiveOptions {
      */
     dragFriction?: number;
     /**
+     * LDS: A constant to help force the 1 perPage rule for dragging/swiping
+     */
+    constraint?: number;
+    /**
      * Determines the number of slides to move at once.
      */
     perMove?: number;

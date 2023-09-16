@@ -1422,6 +1422,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     }
 
     function move(dest, index, prev, callback) {
+      console.log("canShift: " + canShift(dest > prev));
+
       if (dest !== index && canShift(dest > prev)) {
         cancel();
         translate(shift(getPosition(), dest > prev), true);
@@ -1523,7 +1525,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
     function canShift(backwards) {
       var shifted = orient(shift(getPosition(), backwards));
-      return backwards ? shifted >= 0 : shifted <= list[resolve("scrollWidth")] - rect(track)[resolve("width")];
+      return backwards ? shifted >= 0 : true;
     }
 
     function exceededLimit(max, position) {
@@ -2177,6 +2179,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             target = isTouch ? track : window;
             dragging = state.is([MOVING, SCROLLING]);
             prevBaseEvent = null;
+            console.log("on pointer down");
             bind(target, POINTER_MOVE_EVENTS, onPointerMove, SCROLL_LISTENER_OPTIONS);
             bind(target, POINTER_UP_EVENTS, onPointerUp, SCROLL_LISTENER_OPTIONS);
             Move.cancel();
@@ -2193,16 +2196,15 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       if (!state.is(DRAGGING)) {
         state.set(DRAGGING);
         emit(EVENT_DRAG);
+        console.log("drag start");
       }
 
       if (e.cancelable) {
         if (dragging) {
-          Move.translate(basePosition + constrain(diffCoord(e)));
-          var expired = diffTime(e) > LOG_INTERVAL;
-          var hasExceeded = exceeded !== (exceeded = exceededLimit());
+          var diff = constrain(diffCoord(e));
 
-          if (expired || hasExceeded) {
-            save(e);
+          if (Math.abs(options.constraint) - Math.abs(diff) > 0) {
+            Move.translate(basePosition + constrain(diffCoord(e)));
           }
 
           clickPrevented = true;
@@ -2241,12 +2243,32 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       prevBaseEvent = baseEvent;
       baseEvent = e;
       basePosition = getPosition();
+      console.log("save");
     }
 
     function move(e) {
       var velocity = computeVelocity(e);
       var destination = computeDestination(velocity);
       var rewind = options.rewind && options.rewindByDrag;
+      console.log("move");
+      console.log(Math.abs(basePosition - destination));
+
+      if (Math.abs(basePosition - destination) > options.constraint) {
+        if (destination < basePosition) {
+          destination = basePosition - options.constraint;
+
+          if (Controller.getIndex() === 0) {
+            destination = basePosition + options.constraint;
+          }
+        } else {
+          destination = basePosition + options.constraint;
+
+          if (Controller.getIndex() === Controller.getEnd()) {
+            destination = basePosition - options.constraint;
+          }
+        }
+      }
+
       reduce(false);
 
       if (isFree) {
@@ -2307,7 +2329,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     }
 
     function constrain(diff) {
-      return diff / options.dragFriction;
+      return diff / 1;
     }
 
     function isDraggable(target2) {
